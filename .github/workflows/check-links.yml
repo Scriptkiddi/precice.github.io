@@ -6,30 +6,23 @@ on:
   pull_request:
     branches:
       - master
+  workflow_run:
+    workflows: ["Build the website"]
+    types:
+      - completed
 
 jobs:
   checklinks:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Linux
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
         with:
-          submodules: true
-          lfs: true
-      - name: Install bundler
-        run: sudo apt update -y && sudo apt install -y bundler
-      - name: Restore cache
-        uses: actions/cache@v2
-        with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-new-gems-${{ hashFiles('**/Gemfile.lock') }}
-      - name: Install dependencies
-        run: |
-          bundle config path "$PWD/vendor/bundle"
-          bundle install
+          name: site
+          path: _site
       - name: Check for broken links
         run: |
           bundle exec htmlproofer --log-level :debug ./_site &> links.log
