@@ -17,6 +17,7 @@ jobs:
           lfs: true
       - uses: ruby/setup-ruby@v1
         with:
+          ruby-version: 2.7
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Build site
         run: bundle exec jekyll build
