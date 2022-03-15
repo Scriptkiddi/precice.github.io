@@ -23,12 +23,21 @@ jobs:
         with:
           name: site
           path: _site
+      - name: Restore cache
+        uses: actions/cache@v2
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-new-gems-${{ hashFiles('**/Gemfile.lock') }}
+      - name: Install dependencies
+        run: |
+          bundle config path "$PWD/vendor/bundle"
+          bundle install html-proofer
       - name: Check for broken links
         run: |
           bundle exec htmlproofer --log-level :debug ./_site &> links.log
         continue-on-error: true
       - name: Archive log links
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v2
         with:
           name: links-check.log
           path: links.log
