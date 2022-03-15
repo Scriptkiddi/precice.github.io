@@ -27,7 +27,7 @@ jobs:
         run: |
           bundle config path "$PWD/vendor/bundle"
           bundle install
-          bundle install html-proofer
+          gem install html-proofer
       - name: Check for broken links
         run: |
           bundle exec htmlproofer --log-level :debug ./_site &> links.log
