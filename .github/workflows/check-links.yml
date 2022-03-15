@@ -14,10 +14,13 @@ jobs:
     strategy:
       fail-fast: false
     steps:
-      - uses: actions/download-artifact@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
         with:
-          name: site
-          path: _site
+          submodules: true
+          lfs: true
+      - name: Install bundler
+        run: sudo apt update -y && sudo apt install -y bundler
       - name: Restore cache
         uses: actions/cache@v2
         with:
@@ -26,6 +29,7 @@ jobs:
       - name: Install dependencies
         run: |
           bundle config path "$PWD/vendor/bundle"
+          bundle install
           bundle install html-proofer
       - name: Check for broken links
         run: |
