@@ -1,13 +1,7 @@
 name: CheckLinks
 on:
-  push:
-    branches:
-      - master
-  pull_request:
-    branches:
-      - master
   workflow_run:
-    workflows: ["Build the website"]
+    workflows: ["build"]
     types:
       - completed
 
