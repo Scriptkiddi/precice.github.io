@@ -15,24 +15,16 @@ jobs:
         with:
           submodules: true
           lfs: true
-      - name: Install bundler
-        run: sudo apt update -y && sudo apt install -y bundler
-      - name: Restore cache
-        uses: actions/cache@v2
+      - uses: ruby/setup-ruby@v2
         with:
-          path: vendor/bundle
-          key: ${{ runner.os }}-new-gems-${{ hashFiles('**/Gemfile.lock') }}
-      - uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: "2.7"
+          ruby-version: 2.7 # Not needed with a .ruby-version file
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - name: Install dependencies
         run: |
-          bundle config path "$PWD/vendor/bundle"
-          bundle install
           gem install html-proofer
       - name: Check for broken links
         run: |
-          bundle exec htmlproofer --log-level :debug ./_site &> links.log
+          htmlproofer --log-level :debug ./_site &> links.log
         continue-on-error: true
       - name: Archive log links
         uses: actions/upload-artifact@v2
