@@ -8,7 +8,7 @@ on:
 jobs:
   checklinks:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    name: Linux
+    name: Check Links
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
