@@ -26,7 +26,7 @@ jobs:
           gem install html-proofer
       - name: Check for broken links
         run: |
-          htmlproofer --assume-extension .html --allow-hash-href --empty-alt-ignore --disable-external ./_site &> links.log
+          htmlproofer --assume-extension ".html" --allow-hash-href --empty-alt-ignore --disable-external ./_site &> links.log
         continue-on-error: true
       - name: Archive log links
         uses: actions/upload-artifact@v2
